@@ -34,7 +34,7 @@ You can choose to save the results to a `results.txt` file or send them directly
     ```
 4.  **Navigate to the Tool Directory:**
     ```bash
-    cd ExtractorTool
+    cd DataExtractor
     ```
 
 5.  **Install Required Python Libraries:**
