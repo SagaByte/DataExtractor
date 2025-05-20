@@ -13,6 +13,7 @@ def extract_from_text(text):
     """
     Extracts emails, phone numbers, and URLs from a given text.
     """
+    # CORRECTED: The email regex now correctly uses [a-zA-Z0-9.-]
     emails = re.findall(r'[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}', text)
     # This regex attempts to catch various phone number formats
     phones = re.findall(r'(?:\+?\d{1,3}[-.●\s]?)?\(?\d{3}\)?[-.●\s]?\d{3}[-.●\s]?\d{4}(?:\s*x\d+)?', text)
