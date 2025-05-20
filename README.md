@@ -30,7 +30,8 @@ You can choose to save the results to a `results.txt` file or send them directly
 
 3.  **Clone the Repository:**
     ```bash
-    git clone [https://github.com/YOUR_USERNAME/ExtractorTool.git](https://github.com/YOUR_USERNAME/ExtractorTool.git)
+    git clone 
+    https://github.com/SagaByte/DataExtractor
     ```
     **(Replace `YOUR_USERNAME` with your actual GitHub username where you uploaded the tool)**
 
