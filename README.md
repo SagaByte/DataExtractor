@@ -50,17 +50,6 @@ You can choose to save the results to a `results.txt` file.
 To extract data and display it in the terminal:
 
 ```bash
-python extractor.py <file_path>
+python extractor.py example.txt -s
 
-Saving Results to a File
-If you want to save the extracted data to a text file named results.txt in the current directory, use the -s or --save flag:
-
-Bash
-
-python extractor.py <file_path> -s
-Examples:
-
-Bash
-
-python extractor.py sensitive_data.txt -s
-python extractor.py client_contacts.pdf --save
+python extractor.py example.pdf --save
