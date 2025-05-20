@@ -13,7 +13,7 @@ def extract_from_text(text):
     """
     Extracts emails, phone numbers, and URLs from a given text.
     """
-    emails = re.findall(r'[a-zA-Z0-9._%+-]+@[a-zA-0-9.-]+\.[a-zA-Z]{2,}', text)
+    emails = re.findall(r'[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}', text)
     # This regex attempts to catch various phone number formats
     phones = re.findall(r'(?:\+?\d{1,3}[-.●\s]?)?\(?\d{3}\)?[-.●\s]?\d{3}[-.●\s]?\d{4}(?:\s*x\d+)?', text)
     # This regex for URLs covers http/https and common domain characters
