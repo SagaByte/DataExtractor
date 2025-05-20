@@ -30,8 +30,7 @@ You can choose to save the results to a `results.txt` file or send them directly
 
 3.  **Clone the Repository:**
     ```bash
-    git clone 
-    https://github.com/SagaByte/DataExtractor
+    git clone https://github.com/SagaByte/DataExtractor
     ```
 4.  **Navigate to the Tool Directory:**
     ```bash
