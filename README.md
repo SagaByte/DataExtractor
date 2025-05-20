@@ -45,11 +45,8 @@ You can choose to save the results to a `results.txt` file.
 
 ## Usage
 
-### Basic Usage
-
-To extract data and display it in the terminal:
-
 ```bash
 python extractor.py example.txt -s
 
+```bash
 python extractor.py example.pdf --save
