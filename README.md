@@ -1,20 +1,20 @@
-# Extractor Tool for Termux
+# DataExtractor
 
-An easy-to-use tool for Termux to extract important data from text (.txt) and PDF (.pdf) files. This tool helps you pull and display:
+A simple Termux tool to extract **email addresses, phone numbers, and URLs** from `.txt` and `.pdf` files.
+
+This tool helps you pull and display:
 
 -   **Email addresses**
 -   **Phone numbers**
 -   **Links (URLs)**
 
-You can choose to save the results to a `results.txt` file or send them directly to your Telegram account.
+You can choose to save the results to a `results.txt` file.
 
 ## Features
 
 -   Extracts emails, phone numbers, and URLs using robust regular expressions.
 -   Supports both `.txt` and `.pdf` file formats.
 -   Option to save extracted data to a local `results.txt` file.
--   Option to send extracted data directly to a Telegram chat.
--   Handles large Telegram messages by splitting them into chunks.
 
 ## Installation on Termux
 
@@ -32,6 +32,7 @@ You can choose to save the results to a `results.txt` file or send them directly
     ```bash
     git clone https://github.com/SagaByte/DataExtractor
     ```
+
 4.  **Navigate to the Tool Directory:**
     ```bash
     cd DataExtractor
