@@ -33,8 +33,6 @@ You can choose to save the results to a `results.txt` file or send them directly
     git clone 
     https://github.com/SagaByte/DataExtractor
     ```
-    **(Replace `YOUR_USERNAME` with your actual GitHub username where you uploaded the tool)**
-
 4.  **Navigate to the Tool Directory:**
     ```bash
     cd ExtractorTool
