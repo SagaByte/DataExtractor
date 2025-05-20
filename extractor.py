@@ -1,7 +1,6 @@
 import re
 import argparse
 import os
-import asyncio # Import asyncio for async functions
 
 # Try to import PyPDF2, provide error message if not installed
 try:
@@ -10,31 +9,11 @@ except ImportError:
     print("PyPDF2 is not installed. Please install it using: pip install PyPDF2")
     exit(1) # Exit if essential library is missing
 
-# Try to import telegram, provide error message if not installed
-try:
-    from telegram import Bot
-    from telegram.error import TelegramError
-    # This is to handle 'RuntimeWarning: coroutine 'Bot.__init__' was never awaited'
-    # if Bot is not properly awaited, though it's typically fine for simple usage here.
-except ImportError:
-    print("python-telegram-bot is not installed. Telegram functionality will be disabled.")
-    Bot = None # Disable Telegram functionality if the library is not present
-
-# This is a common workaround for running asyncio in environments where an event loop might already be running
-# or for Jupyter notebooks. It makes `asyncio.run()` more robust.
-try:
-    import nest_asyncio
-    nest_asyncio.apply()
-except ImportError:
-    # nest_asyncio is not strictly required but helps with certain environments.
-    # If it's not installed, the tool will still work, but might hit RuntimeError in some cases.
-    pass
-
 def extract_from_text(text):
     """
     Extracts emails, phone numbers, and URLs from a given text.
     """
-    emails = re.findall(r'[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}', text)
+    emails = re.findall(r'[a-zA-Z0-9._%+-]+@[a-zA-0-9.-]+\.[a-zA-Z]{2,}', text)
     # This regex attempts to catch various phone number formats
     phones = re.findall(r'(?:\+?\d{1,3}[-.●\s]?)?\(?\d{3}\)?[-.●\s]?\d{3}[-.●\s]?\d{4}(?:\s*x\d+)?', text)
     # This regex for URLs covers http/https and common domain characters
@@ -85,65 +64,7 @@ def save_results(filename, emails, phones, urls):
             f.write("No URLs found.\n")
     print(f"Results saved to {filename}")
 
-async def send_to_telegram(token, chat_id, emails, phones, urls):
-    """
-    Sends the extracted data to a Telegram chat.
-    """
-    if not Bot:
-        print("Telegram functionality is not available because 'python-telegram-bot' is not installed.")
-        return
-
-    # Ensure token and chat_id are valid
-    if not token or not chat_id:
-        print("Telegram token and chat ID must be provided to send results to Telegram.")
-        return
-
-    bot = Bot(token=token)
-    message = "--- Extracted Data ---\n\n"
-
-    message += "Emails:\n"
-    if emails:
-        for email in sorted(list(set(emails))):
-            message += f"- {email}\n"
-    else:
-        message += "No emails found.\n"
-
-    message += "\nPhone Numbers:\n"
-    if phones:
-        for phone in sorted(list(set(phones))):
-            message += f"- {phone}\n"
-    else:
-        message += "No phone numbers found.\n"
-
-    message += "\nURLs:\n"
-    if urls:
-        for url in sorted(list(set(urls))):
-            message += f"- {url}\n"
-    else:
-        message += "No URLs found.\n"
-
-    try:
-        # Telegram messages have a character limit (4096 characters).
-        # We should split the message if it's too long.
-        if len(message) > 4096:
-            print("Warning: Telegram message is too long. Splitting into multiple messages.")
-            chunks = [message[i:i+4000] for i in range(0, len(message), 4000)] # Split into chunks
-            for i, chunk in enumerate(chunks):
-                await bot.send_message(chat_id=chat_id, text=f"Part {i+1}:\n{chunk}")
-                await asyncio.sleep(0.5) # Small delay to avoid hitting rate limits
-        else:
-            await bot.send_message(chat_id=chat_id, text=message)
-        print("Results sent to Telegram successfully!")
-    except TelegramError as e:
-        print(f"Error sending to Telegram: {e}")
-        if "Bad Request: chat not found" in str(e) or "Forbidden: bot was blocked by the user" in str(e):
-            print("Please ensure the chat ID is correct and you have started a conversation with the bot.")
-        elif "Unauthorized" in str(e):
-            print("Please check if your Telegram Bot API token is correct.")
-    except Exception as e:
-        print(f"An unexpected error occurred while sending to Telegram: {e}")
-
-async def main():
+def main():
     """
     Main function to parse arguments and run the extraction process.
     """
@@ -155,18 +76,6 @@ async def main():
     parser.add_argument(
         "-s", "--save", action="store_true",
         help="Save results to results.txt in the current directory."
-    )
-    parser.add_argument(
-        "-t", "--telegram", action="store_true",
-        help="Send results to Telegram.\nRequires --telegram_token and --telegram_chat_id."
-    )
-    parser.add_argument(
-        "--telegram_token",
-        help="Your Telegram Bot API Token (e.g., from BotFather). Required with -t."
-    )
-    parser.add_argument(
-        "--telegram_chat_id",
-        help="Your Telegram Chat ID (the ID of the chat you want to send messages to). Required with -t."
     )
 
     args = parser.parse_args()
@@ -215,11 +124,5 @@ async def main():
     if args.save:
         save_results("results.txt", emails, phones, urls)
 
-    if args.telegram:
-        if not args.telegram_token or not args.telegram_chat_id:
-            print("Error: --telegram_token and --telegram_chat_id are required for Telegram functionality.")
-        else:
-            await send_to_telegram(args.telegram_token, args.telegram_chat_id, emails, phones, urls)
-
 if __name__ == "__main__":
-    asyncio.run(main())
+    main()
