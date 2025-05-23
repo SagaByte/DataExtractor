@@ -47,5 +47,6 @@ You can choose to save the results to a `results.txt` file.
 
 ```bash
 python extractor.py example.txt -s
-
+```
+```bash
 python extractor.py example.pdf --save
