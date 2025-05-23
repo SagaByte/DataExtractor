@@ -2,50 +2,37 @@ import re
 import argparse
 import os
 
-# Try to import PyPDF2, provide error message if not installed
 try:
     from PyPDF2 import PdfReader
 except ImportError:
     print("PyPDF2 is not installed. Please install it using: pip install PyPDF2")
-    exit(1) # Exit if essential library is missing
+    exit(1)
 
 def extract_from_text(text):
-    """
-    Extracts emails, phone numbers, and URLs from a given text.
-    """
-    # CORRECTED: The email regex now correctly uses [a-zA-Z0-9.-]
     emails = re.findall(r'[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}', text)
-    # This regex attempts to catch various phone number formats
     phones = re.findall(r'(?:\+?\d{1,3}[-.●\s]?)?\(?\d{3}\)?[-.●\s]?\d{3}[-.●\s]?\d{4}(?:\s*x\d+)?', text)
-    # This regex for URLs covers http/https and common domain characters
     urls = re.findall(r'https?://(?:www\.)?[a-zA-Z0-9./-]+(?:/[a-zA-Z0-9./-]+)*\b', text)
     return emails, phones, urls
 
 def extract_from_pdf(pdf_path):
-    """
-    Extracts text from a PDF file and then calls extract_from_text to find data.
-    """
     all_text = ""
     try:
         with open(pdf_path, 'rb') as f:
             reader = PdfReader(f)
             for page in reader.pages:
                 page_text = page.extract_text()
-                if page_text: # Ensure text is not None
-                    all_text += page_text + "\n" # Add newline for better separation between pages
+                if page_text:
+                    all_text += page_text + "\n"
     except Exception as e:
         print(f"Error reading PDF file {pdf_path}: {e}")
-        return [], [], [] # Return empty lists on error
+        return [], [], []
     return extract_from_text(all_text)
 
 def save_results(filename, emails, phones, urls):
-    """
-    Saves the extracted emails, phone numbers, and URLs to a specified file.
-    """
     with open(filename, 'w', encoding='utf-8') as f:
         f.write("--- Extracted Emails ---\n")
         if emails:
-            for email in sorted(list(set(emails))): # Use set for uniqueness, convert to list, sort for consistency
+            for email in sorted(list(set(emails))):
                 f.write(f"- {email}\n")
         else:
             f.write("No emails found.\n")
@@ -66,12 +53,9 @@ def save_results(filename, emails, phones, urls):
     print(f"Results saved to {filename}")
 
 def main():
-    """
-    Main function to parse arguments and run the extraction process.
-    """
     parser = argparse.ArgumentParser(
         description="Extractor Tool: Extract emails, phone numbers, and URLs from text and PDF files.",
-        formatter_class=argparse.RawTextHelpFormatter # Preserve newlines in help
+        formatter_class=argparse.RawTextHelpFormatter
     )
     parser.add_argument("file", help="Path to the .txt or .pdf file.")
     parser.add_argument(
