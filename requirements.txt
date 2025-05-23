@@ -1,3 +1,2 @@
 PyPDF2
-python-telegram-bot
 nest-asyncio
