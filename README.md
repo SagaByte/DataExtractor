@@ -46,7 +46,8 @@ You can choose to save the results to a `results.txt` file.
 ## Usage
 
 With -s/-- save you can save the file if it was Pdf/txt
-Example:
+
+## Example:
 ```bash
 python extractor.py example.txt -s
 ```
